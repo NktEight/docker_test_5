@@ -1,11 +1,14 @@
 package com.example.demo.services;
 
+import com.example.demo.controllers.SettingsController;
 import com.example.demo.crudwithvaadin.DashboardRepository;
 import com.example.demo.crudwithvaadin.SettingsRepository;
 import com.example.demo.entities.Dashboard;
 import com.example.demo.entities.Settings;
 import com.example.demo.exeptions.DashboardNotFoundException;
 import com.example.demo.exeptions.SettingsIsAlreadyAssignedException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,8 +25,9 @@ public class DashboardService {
     private DashboardRepository dashboardRepository;
     @Autowired
     private SettingsService settingsService;
-
+    private static final Logger logger = LoggerFactory.getLogger(SettingsController.class);
     public Dashboard addDashboard(Dashboard dashboard){
+        logger.info("FINAL DASHBOARD CREATING: " + dashboard);
         return dashboardRepository.save(dashboard);
     }
 
@@ -41,6 +45,10 @@ public class DashboardService {
         dashboardRepository.delete(dashboard);
         return dashboard;
     }
+
+    public void deleteAll(){
+       dashboardRepository.deleteAll();;
+    }
     @Transactional
     public Dashboard editDashboard(Long id, Dashboard dashboard){
         Dashboard dashboardToEdit = getDashboard(id);
@@ -55,6 +63,7 @@ public class DashboardService {
                 throw new SettingsIsAlreadyAssignedException(settings.getUuid(), settings.getDashboard().getId());
             }
             dashboard.addSettings(settings);
+            settings.setDashboard(dashboard);
             return dashboard;
     }
     @Transactional

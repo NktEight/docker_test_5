@@ -9,16 +9,20 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Data
 public class DashboardDto {
     private Long id;
-    private List<SettingsDto> settingsDtoList = new ArrayList<>();
-    public static DashboardDto from(Dashboard dashboard){
+    private List<SettingsDto> settingsDtoList;
+
+    public static DashboardDto from(Dashboard dashboard) {
         DashboardDto dashboardDto = new DashboardDto();
         dashboardDto.setId(dashboard.getId());
-        dashboardDto.setSettingsDtoList(dashboard.getSettingsList().stream().map(SettingsDto::from).collect(Collectors.toList()));
+        if (Objects.nonNull(dashboard.getSettingsList())) {
+            dashboardDto.setSettingsDtoList(dashboard.getSettingsList().stream().map(SettingsDto::from).collect(Collectors.toList()));
+        }
         return dashboardDto;
     }
 }

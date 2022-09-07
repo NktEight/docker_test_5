@@ -4,8 +4,11 @@ package com.example.demo.controllers;
 
 import ch.qos.logback.classic.LoggerContext;
 import com.example.demo.crudwithvaadin.SettingsRepository;
+import com.example.demo.dto.PlainDashboardDto;
 import com.example.demo.dto.SettingsDto;
+import com.example.demo.entities.Dashboard;
 import com.example.demo.entities.Settings;
+import com.example.demo.services.DashboardService;
 import com.example.demo.services.SettingsService;
 import org.apache.logging.log4j.spi.LoggerContextFactory;
 import org.slf4j.Logger;
@@ -16,6 +19,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -28,11 +33,17 @@ public class SettingsController {
     private SettingsRepository settingsRepository;
     @Autowired
     private SettingsService settingsService;
+    @Autowired
+    private DashboardService dashboardService;
     private static final Logger logger = LoggerFactory.getLogger(SettingsController.class);
 
     @PostMapping
     public ResponseEntity<SettingsDto> addSettings(@RequestBody SettingsDto settingsDto) {
-        Settings settings = settingsService.addSettings(Settings.from(settingsDto));
+        logger.info(settingsDto.toString());
+        Settings settingsFrom =  Settings.from(settingsDto);
+        Dashboard dashboard = Dashboard.from(settingsDto.getPlainDashboardDto());
+        settingsFrom.setDashboard(dashboard);
+        Settings settings = settingsService.addSettings(settingsFrom);
         return new ResponseEntity<>(SettingsDto.from(settings) , HttpStatus.OK);
 
     }
@@ -60,6 +71,8 @@ public class SettingsController {
         Settings settings = settingsService.editSettings(uuid, Settings.from(settingsDto));
         return new ResponseEntity<>(SettingsDto.from(settings), HttpStatus.OK);
     }
+
+
 //
 //
 //    @GetMapping("/getAllSettings")

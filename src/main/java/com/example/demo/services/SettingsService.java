@@ -47,6 +47,10 @@ public class SettingsService {
         this.settingsRepository.delete(settings);
         return settings;
     }
+
+    public void deleteAll(){
+        settingsRepository.deleteAll();
+    }
     @Transactional
     public Settings editSettings(UUID uuid, Settings settings){
         Settings settingsToEdit = getSettingsById(uuid);

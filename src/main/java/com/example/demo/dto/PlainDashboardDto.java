@@ -11,4 +11,15 @@ public class PlainDashboardDto {
         plainDashboardDto.setId(dashboard.getId());
         return plainDashboardDto;
     }
+
+    public PlainDashboardDto(Long id) {
+        this.id = id;
+    }
+
+    public PlainDashboardDto(int int_id){
+        this.id = (long) int_id;
+    }
+
+    public PlainDashboardDto() {
+    }
 }

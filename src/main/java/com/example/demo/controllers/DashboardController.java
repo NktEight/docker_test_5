@@ -31,7 +31,10 @@ public class DashboardController {
 
     @PostMapping
     public ResponseEntity<DashboardDto> addDashboard(@RequestBody final DashboardDto dashboardDto){
-        Dashboard dashboard = dashboardService.addDashboard(Dashboard.from(dashboardDto));
+        logger.info("NKT: " + dashboardDto.toString());
+        Dashboard test = Dashboard.from(dashboardDto);
+        logger.info("FROM DTO TO DASHBOARD " + dashboardDto);
+        Dashboard dashboard = dashboardService.addDashboard(test);
         logger.info("NKT: " + dashboard.toString());
         return new ResponseEntity<>(DashboardDto.from(dashboard), HttpStatus.OK);
     }
@@ -67,7 +70,7 @@ public class DashboardController {
             @PathVariable final Long dashboardId,
             @PathVariable final UUID settingsUUID
             ){
-
+        logger.info(dashboardId + "/settings/" + settingsUUID.toString());
         Dashboard dashboard = dashboardService.addSettingsToDashboard(dashboardId, settingsUUID);
         return new ResponseEntity<>(DashboardDto.from(dashboard), HttpStatus.OK);
     }
@@ -81,16 +84,5 @@ public class DashboardController {
         Dashboard dashboard = dashboardService.removeSettingsFromDashboard(dashboardId, settingsUUID);
         return new ResponseEntity<>(DashboardDto.from(dashboard), HttpStatus.OK);
     }
-
-//    @PostMapping("/createDashboard")
-//    public void createDashboard(@RequestBody Dashboard dashboard) {
-//        this.dashboardRepository.save(dashboard);
-//    }
-//
-//    @GetMapping("/getAllDashboards")
-//    public String getAllDashboards() {
-//        return this.dashboardRepository.findAll().toString();
-//    }
-
 
 }
