@@ -42,6 +42,7 @@ public class DashboardService {
 
     public Dashboard deleteDashboardById(Long id){
         Dashboard dashboard = getDashboard(id);
+        dashboard.getSettingsList().forEach(e -> settingsService.deleteSettings(e.uuid));
         dashboardRepository.delete(dashboard);
         return dashboard;
     }

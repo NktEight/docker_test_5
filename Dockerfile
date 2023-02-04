@@ -27,6 +27,7 @@
 #ENTRYPOINT exec java $JAVA_OPTS -jar /app.jar $ARGS
 #ENTRYPOINT ["java", "-jar", "/spring-boot-docker.jar", "$ARGS"]
 ##################
+#FROM openjdk:11
 FROM openjdk:11
 VOLUME /tmp
 ARG JAR_FILE
